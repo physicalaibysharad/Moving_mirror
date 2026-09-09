@@ -1,0 +1,37 @@
+Let's look at the following quantity,
+\begin{eqnarray*}
+     &=~<\varphi_{\omegap}|\varphi^{scat}_k>\\
+     &=~ <\varphi_{\omegap}|\int_0^\infty d\omega(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*)>\\
+    &=~\int_0^\infty d\omega<\varphi_{\omegap}|(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*)>\\
+    &=~\int_0^\infty d\omega(\alpha_{\omega k}^*<\varphi_{\omegap}|\varphi_\omega>-\beta^*_{\omega k}<\varphi_{\omegap}|\varphi_\omega^*>)\\
+    &=~\int_0^\infty d\omega(\alpha_{\omega k}^*\emph{sgn}(\omega)\delta(\omegap-\omega)-\beta^*_{\omega k}\emph{sgn}(\omega)\delta(\omegap+\omega))\\
+    &=~\alphaok^*
+\end{eqnarray*}
+In the first step above we use the fact that the Klein-Gordon product is distributive in it's argument. In the final step, first term vanishes because the integral only covers positive frequency and the Dirac delta function is only non-zero when $\omega~=~-\omegap$. By taking the complex conjugate of the above we can see that 
+
+\begin{equation}
+    \alphaok~=~<\varphi_{\omegap}^*|\varphi^{scat~*}_k>
+\end{equation}
+
+Similarly let's look at the following quantity,
+\begin{eqnarray*}
+     &=~<\varphi^*_{\omegap}|\varphi^{scat}_k>\\
+     &=~ <\varphi^*_{\omegap}|\int_0^\infty d\omega(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*)>\\
+    &=~\int_0^\infty d\omega<\varphi^*_{\omegap}|(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*)>\\
+    &=~\int_0^\infty d\omega(\alpha_{\omega k}^*<\varphi^*_{\omegap}|\varphi_\omega>-\beta^*_{\omega k}<\varphi^*_{\omegap}|\varphi_\omega^*>)\\
+    &=~\int_0^\infty d\omega(-\alphaok^*\emph{sgn}(\omega)\delta(\omega+\omegap)+\betaok^*\emph{sgn}(\omega)\delta(\omegap-\omega))\\
+    &=~\beta^*_{\omegap k}
+\end{eqnarray*}
+Similarly, $\betaok$ is 
+\begin{eqnarray*}
+    \betaok = <\varphi_\omega|\varphi^{scat} ^*_k>
+\end{eqnarray*}
+The explicit expression for $\alphaok$ is 
+
+\begin{eqnarray*}
+    \alphaok &=~ <\varphi^*_{\omega}|\varphi^{*scat}_k> \\
+    &=\int_{-\infty}^{+\infty} dV i\left(\frac{e^{i \omega V}}{\sqrt{4\pi|\omega|}}\dl_V(\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}})-\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}}\dl_V(\frac{e^{i \omega V}}{\sqrt{4\pi|\omega|}})\right)\\
+    % &=-\int_{-\infty}^{+\infty} dV i\left(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}}\dl_V(\frac{e^{-i k U_{cl}(V)}}{\sqrt{4\pi|k|}})-\frac{e^{-i k U_{cl}(V)}}{\sqrt{4\pi|k|}}\dl_V(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}})\right)\\
+    &=\int_{-\infty}^{+\infty} dV i\left(\frac{e^{i \omega V}}{\sqrt{4\pi|\omega|}}(ik\dl_VU_{cl}(V))(\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}})-\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}}(i\omega)(\frac{e^{i \omega V}}{\sqrt{4\pi|\omega|}})\right)\\
+    &=\int_{-\infty}^{+\infty} dV \frac{e^{i(U_{cl}(V)k+V\omega)}}{\sqrt{4\pi|\omega|}\sqrt{4\pi |k|}}(-k\dl_V U_{cl}(V)+\omega)\\
+\end{eqnarray*}

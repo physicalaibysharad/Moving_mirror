@@ -1,0 +1,22 @@
+
+\begin{eqnarray*}\label{eq:orthoss}
+    <\varphi^*_k|\varphi^*_{k'}>~&=~\int^{+\infty}_{-\infty}dU i(\varphi_k\dl_U\varphi^*_{k'}-\varphi^*_{k'}\dl_U\varphi_k)=~-<\varphi_k|\varphi_{k'}>^*\\
+    &=~\int^{+\infty}_{-\infty}dU i\left(\frac{e^{-i k U}}{\sqrt{4\pi|k|}}\dl_U(~\frac{e^{i k' U}}{\sqrt{4\pi|k'|}})-~\frac{e^{i k' U}}{\sqrt{4\pi|k'|}}\dl_U(~\frac{e^{-i k U}}{\sqrt{4\pi|k|}})\right)\\
+    &=~\int^{+\infty}_{-\infty}dU i\left(\frac{e^{i k U}}{\sqrt{4\pi|k|}}(ik')~\frac{e^{i k' U}}{\sqrt{4\pi|k'|}}-~\frac{e^{i k' U}}{\sqrt{4\pi|k'|}}(-ik)~\frac{e^{-i k U}}{\sqrt{4\pi|k|}}\right)\\
+    &=~\int^{+\infty}_{-\infty}dU\frac{e^{iU(-k+k')}}{\sqrt{4\pi|k|}\sqrt{4\pi|k'|}}(-k'-k)\\
+    &=~\frac{(-k'-k)}{\sqrt{4\pi|k|}\sqrt{4\pi|k'|}}\int^{+\infty}_{-\infty}dU e^{iU(-k+k')}\\
+    &=~\frac{-(k'+k)}{4\pi\sqrt{|k||k'|}}2\pi\delta(-k+k')\\
+    &=~\frac{2k}{2\sqrt{|k||k'|}}\delta(-k+k')\\
+    &=-~\emph{sgn(k)}\delta(k-k')
+\end{eqnarray*}
+Also let's take a look at the following quantity,
+\begin{eqnarray*}\label{eq:orthoss}
+    <\varphi^*_k|\varphi_{k'}>~&=~\int^{+\infty}_{-\infty}dU i(\varphi_k\dl_U\varphi_{k'}-\varphi_{k'}\dl_U\varphi_k)=~-<\varphi_k|\varphi^*_{k'}>^*\\
+    &=~\int^{+\infty}_{-\infty}dU i\left(\frac{e^{-i k U}}{\sqrt{4\pi|k|}}\dl_U(~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}})-~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}}\dl_U(~\frac{e^{-i k U}}{\sqrt{4\pi|k|}})\right)\\
+    &=~\int^{+\infty}_{-\infty}dU i\left(\frac{e^{-i k U}}{\sqrt{4\pi|k|}}(-ik')~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}}-~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}}(-ik)~\frac{e^{-i k U}}{\sqrt{4\pi|k|}}\right)\\
+    &=~\int^{+\infty}_{-\infty}dU\frac{e^{-iU(k+k')}}{\sqrt{4\pi|k|}\sqrt{4\pi|k'|}}(k'-k)\\
+    &=~\frac{(k'-k)}{\sqrt{4\pi|k|}\sqrt{4\pi|k'|}}\int^{+\infty}_{-\infty}dU e^{-iU(k+k')}\\
+    &=~\frac{(k'-k)}{4\pi\sqrt{|k||k'|}}2\pi\delta(k+k')\\
+    &=~\frac{-2k}{2\sqrt{|k||k'|}}\delta(k+k')\\
+    &=-~\emph{sgn(k)}\delta(k+k')
+\end{eqnarray*}

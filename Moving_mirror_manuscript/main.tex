@@ -1,0 +1,145 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{jheppub} % for details on the use of the package, please see the JINST-author-manual
+% \usepackage{lineno}
+% \linenumbers
+
+\usepackage[symbol]{footmisc}
+\usepackage{amssymb,tabularx,amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+
+%  \usepackage{mathtools}
+% \DeclarePairedDelimiter\bra{\langle}{\rvert}
+% \DeclarePairedDelimiter\ket{\lvert}{\rangle}
+% \DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1\,\delimsize\vert\,\mathopen{}#2}
+\makeatletter
+\usepackage{braket}
+\renewcommand{\thefootnote}{{\@arabic\c@footnote}}
+\newcommand{\omegap}{\omega'}
+\newcommand{\betaok}{\beta_{\omega k}}
+\newcommand{\alphaok}{\alpha_{\omega k}}
+\newcommand{\betaopk}{\beta_{\omega' k}}
+\newcommand{\alphaopk}{\alpha_{\omega' k}}
+\newcommand{\vv}{\mathbb{V}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\iminus}{$i^-$}
+\newcommand{\iplus}{$i^+$}
+\newcommand{\coordt}{$t$}
+\newcommand{\coordz}{$z$}
+\newcommand{\scrim}{$\mathcal{I}^-$}
+\newcommand{\scrip}{$\mathcal{I}^+$}
+\newcommand{\dl}{\partial}
+\newcommand{\inz}{\mathcal{Z}}
+
+\arxivnumber{1234.12345} % if you have one
+
+\title{\boldmath Particle spectrum in Moving Mirror Problem using Deep learning techniques}
+
+% Collaborations
+
+%% [A] If main author
+%% \collaboration{\includegraphics[height=17mm]{collabroation-logo}\\[6pt]
+%%  XXX collaboration}
+
+%% or
+%% [B] If "on behalf of"
+%% \collaboration[c]{on behalf of XXX collaboration}
+
+
+% Authors
+% The "\note" macro will give a warning: "Ignoring empty anchor...", you can safely ignore it.
+
+%% [A] simple case: 2 authors, same institution
+%% \author[1]{A. Uthor\note{Corresponding author.}}
+%% \author{and A. Nother Author}
+%% \affiliation{Institution,\\Address, Country}
+
+%% or, e.g.
+%% [B] more complex case: 4 authors, 3 institutions, 2 footnotes
+%% \author[a,b]{F. Irst,\note{Now at another university}}
+%% \author[c]{S. Econd,}
+%% \author[a,2]{T. Hird\note{Also at Some University.}}
+%% \author[c,2]{and Fourth}
+%% \affiliation[a]{Institution_1,\\Address, Country}
+%% \affiliation[b]{Institution_2,\\Address, Country}
+%% \affiliation[c]{Institution_3,\\Address, Country}
+
+\author{A. Uthor}
+\affiliation{One University,\\
+some-street, Country}
+\affiliation{Another University,\\
+different-address, Country}
+
+% E-mail addresses: only for the corresponding author
+\emailAdd{first@one.univ}
+
+\abstract{Abstract...}
+
+
+
+\begin{document}
+\maketitle
+\flushbottom
+% \input{instructions}
+\input{moving_mirror}
+
+\appendix
+
+\section{The Penrose diagram}\label{app:PenDiag}
+\input{app:PenroseDiagram}
+
+\section{Inner Products of the Klein-Gordon modes}\label{app:IPmode}
+\input{IPmode}
+
+\section{The bogliubov coefficients}
+\input{b_coefficient}\label{app:b_coeff}
+\section{Some title}
+Please always give a title also for appendices.
+\input{new_writeup}
+
+
+
+
+\acknowledgments
+
+This is the most common positions for acknowledgments. A macro is
+available to maintain the same layout and spelling of the heading.
+
+\paragraph{Note added.} This is also a good position for notes added
+after the paper has been written.
+
+
+% Bibliography
+
+% [A] Recommended: using JHEP.bst file
+\bibliographystyle{JHEP}
+\bibliography{biblio.bib}
+
+%% or
+%% [B] Manual formatting (see below)
+%% (i) We suggest to always provide author, title and journal data or doi:
+%% in short all the informations that clearly identify a document.
+%% (ii) please avoid comments such as "For a review'', "For some examples",
+%% "and references therein" or move them in the text. In general, please leave only references in the bibliography and move all
+%% accessory text in footnotes.
+%% (iii) Also, please have only one work for each \bibitem.
+
+% \begin{thebibliography}{99}
+
+% \bibitem{a}
+% Author,
+% \emph{Title},
+% \emph{J. Abbrev.} {\bf vol} (year) pg.
+
+% \bibitem{b}
+% Author,
+% \emph{Title},
+% arxiv:1234.5678.
+
+% \bibitem{c}
+% Author,
+% \emph{Title},
+% Publisher (year).
+
+% \end{thebibliography}
+\end{document}
