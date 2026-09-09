@@ -219,6 +219,6 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Folders
-neuralopeartor/
+neuraloperator/
 data/files
-Research papers/
+Research_papers/
