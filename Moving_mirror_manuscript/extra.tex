@@ -1,0 +1,31 @@
+\section{Anshul's calculations}
+\subsection{Trying to simplify the equations of $\betaok$ and $\alphaok$}
+We have 
+\begin{eqnarray*}
+    \betaok &=~ <\varphi_{\omega}|\varphi^{*scat}_k> \\
+    &=\int_{-\infty}^{+\infty} dV \frac{e^{i(U_{cl}(V)k+V\omega)}}{\sqrt{4\pi|\omega|}\sqrt{4\pi |k|}}(-k\dl_V U_{cl}(V)-\omega)\\
+    &=\int_{-\infty}^{+\infty} dV \frac{e^{iU_{cl}(V)k} e^{iV\omega}}{\sqrt{4\pi|\omega|}\sqrt{4\pi |k|}}(-k\dl_V U_{cl}(V)-\omega)\\
+    &=\int_{-\infty}^{+\infty} dV \frac{e^{iU_{cl}(V)k} e^{iV\omega}}{\sqrt{4\pi|\omega|}\sqrt{4\pi |k|}}(-k\dl_V U_{cl}(V)) - \int_{-\infty}^{+\infty} dV \frac{e^{iU_{cl}(V)k} e^{iV\omega}}{\sqrt{4\pi|\omega|}\sqrt{4\pi |k|}}\omega \\
+\end{eqnarray*}
+
+Let us define the Fourier transform of a function $f$ wrt $V$ as 
+\begin{eqnarray*}
+    \mathcal{F} [f(V)] &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} dV e^{iV\omega} f(V) \\ 
+    \mathcal{F}[f'(V)] &= (i\omega) \mathcal{F}[f(V)] \\ 
+\end{eqnarray*}
+
+\noindent Thus,
+\begin{eqnarray*}
+    \betaok &= -\mathcal{F} \left[ \frac{e^{iU_{cl}(V)k}}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} k\dl_V U_{cl}(V)\right] - \mathcal{F} \left[ \frac{e^{iU_{cl}(V)k}}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \omega\right] \\
+    &= -\frac{1}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ e^{iU_{cl}(V)k} k\dl_V U_{cl}(V) \right] - \frac{\omega}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ e^{iU_{cl}(V)k} \right] \\
+\end{eqnarray*}
+
+\noindent Now, let $W(V) = e^{iU_{cl}(V)k}$ then $W'(V) = e^{iU_{cl}(V)k} ik \dl_VU_{ck}(V)$. So our equations become
+\begin{eqnarray*}
+    \betaok &= -\frac{1}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ \frac{W'(V)}{i} \right] - \frac{\omega}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ W(V) \right] \\
+    &= -\frac{\frac{i\omega}{i}}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ W(V) \right] - \frac{\omega}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ W(V) \right] \\
+    &= -\frac{\omega}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ W(V) \right] - \frac{\omega}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ W(V) \right] \\
+    &= -\frac{2\omega}{\sqrt{2|\omega|}\sqrt{4\pi |k|}} \mathcal{F}\left[ W(V) \right]
+\end{eqnarray*} 
+
+\noindent Here we can use a neural network to compute the Fourier Transform of $W$

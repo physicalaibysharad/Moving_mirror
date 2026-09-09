@@ -1,0 +1,567 @@
+
+
+\section{Introduction}
+The setup of the system and the calculations it follows are heavily borrowed from \cite{Obadia_2001}. Our focus lies completely in the section (2.1), and we do not bother ourselves with the partially reflecting mirror case.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Penrose diagram for 1+1 dimension}
+
+To formulate the Penrose diagram, we consider various limits of the coordinates to reach different asymptotic regions of the spacetimes. We begin with the coordinates (\coordt,\coordz) but since the focus lies on massless scalar field in 2 dimension, we formulate our problem in the light cone coordinate which are given as $U, V~=~ t\mp z$.
+ 
+
+The Penrose diagrams for the following can be seen as 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Penrose diagram.png}
+    \caption{Penrose Diagram 1+1}
+    \label{fig:penrose_diagram}
+\end{figure}
+The construction of the above diagram can be seen in the appendix \ref{app:PenDiag}
+%----------------------------------------------------------------------------------------------------------------------------------------
+
+\section{Real Scalar field}
+
+The setup of the problem is as follows: There is a point mirror whose trajectory starts from \iminus and ends at \iplus. A scalar that satisfies the massless Klein-Gordon equation
+\begin{equation}\label{eq:waveequationtr}
+    (\frac{\partial^2}{\partial t^2}-\frac{\partial^2}{\partial z^2})\Phi(t,z)~=~0
+\end{equation}
+
+or
+
+\begin{equation*}\label{eq:waveequationUV}
+    \frac{\partial^2}{\partial U\partial V}\Phi(U,V)~=~0
+\end{equation*}
+ is emitted from the past null infinity and after getting scattered off the mirror reaches future null infinity. Since, we are not considering the back reaction of scattering in this problem, the motion of mirror can be specified freely. Also, since the mirror is a massive object, the trajectory of the mirror starts from \iminus and ends at \iplus. Let the trajectory of the mirror is given by $z_{cl}(t)$.
+ 
+ 
+ Because the mirror is perfectly reflecting we impose the boundary condition
+ \begin{equation}\label{eq:bc}
+    \Phi(t,z_{cl}(t))~=~0    
+ \end{equation}
+
+ Also, the left modes completely decouple from the right modes as can be seen from the general solution of the wave equation. We here focus on the field which live on the left hand side of the mirror(\ref{fig:penrose_diagram})\. The solution to equation (\ref{eq:waveequationUV}) on the surface V = -$\infty$ is 
+ \begin{equation}\label{eq:modeU}
+    \varphi_k(U)~=~\frac{e^{-i k U}}{\sqrt{4\pi|k|}}.
+ \end{equation}
+
+ Above modes form a complete and orthonormal basis of the equation (\ref{eq:waveequationUV}). They are orthogonal in the sense of the norm determined by the Klein-Gordon scalar product, which reads, when evaluated on \scrim :
+ \begin{equation}\label{eq:KG_inner_product}
+    \braket{\varphi_k|\varphi_{k'}}~=~\int^{+\infty}_{-\infty}dU i(\varphi^*_k\dl_U\varphi_{k'}-\varphi_{k'}\dl_U\varphi^*_k)
+ \end{equation}
+Let us check the above expression for two modes given in \ref{eq:modeU}.
+\begin{equation}\label{eq:orthorr}
+\begin{aligned}
+     \braket{\varphi_k|\varphi_{k'}}~&=~\int^{+\infty}_{-\infty}dU i(\varphi^*_k\dl_U\varphi_{k'}-\varphi_{k'}\dl_U\varphi^*_k)\\
+    &=~\int^{+\infty}_{-\infty}dU i\left(\frac{e^{i k U}}{\sqrt{4\pi|k|}}\dl_U(~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}})-~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}}\dl_U(~\frac{e^{i k U}}{\sqrt{4\pi|k|}})\right)\\
+    &=~\int^{+\infty}_{-\infty}dU i\left(\frac{e^{i k U}}{\sqrt{4\pi|k|}}(-ik')~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}}-~\frac{e^{-i k' U}}{\sqrt{4\pi|k'|}}(ik)~\frac{e^{i k U}}{\sqrt{4\pi|k|}}\right)\\
+    &=~\int^{+\infty}_{-\infty}dU\frac{e^{iU(k-k')}}{\sqrt{4\pi|k|}\sqrt{4\pi|k'|}}(k'+k)\\
+    &=~\frac{(k'+k)}{\sqrt{4\pi|k|}\sqrt{4\pi|k'|}}\int^{+\infty}_{-\infty}dU e^{iU(k-k')}\\
+    &=~\frac{(k'+k)}{4\pi\sqrt{|k||k'|}}2\pi\delta(k-k')\\
+    &=~\frac{2k}{2\sqrt{|k||k'|}}\delta(k-k')\\
+    &=~\emph{sgn(k)}\delta(k-k')
+\end{aligned}
+\end{equation}
+The other related quantities are as follows,
+\begin{enumerate}
+    \item $<\varphi^*_k|\varphi^*_{k'}>~=~\emph{sgn(k)}\delta(k-k')$,
+    \item $<\varphi^*_k|\varphi_{k'}>~=~-~\emph{sgn(k)}\delta(k+k')$.
+\end{enumerate}
+The calculation of the above can be found in the Appendix \ref{app:IPmode}
+
+The value of the scalar field, as given by the solution, on the mirror is 
+ \begin{equation*}
+     \varphi_k^{scat}(V)~=~\frac{e^{-i k U_{cl}(V)}}{\sqrt{4\pi|k|}}
+ \end{equation*}.
+ Let's look at the quantity $U_{cl}$ quickly. In order to obtain it, we look at the coordinate transformation, $U, V~=~t\mp z$. For $V_{cl}=t~-~z_{cl}(t)$, we assume that in principle, one can always invert this relation (at least numerically) in the form, $t~=~f(V_{cl})$. Then we substitute this equation in the $U$ relation, $U_{cl}(V)~=~f(V)+z_{cl}(f(V))$.
+
+ 
+ Finally, the in-mode $\varphi_k^{in}(U,V)$ is given by 
+ \begin{equation*}
+     \varphi_k^{in}(U,V) = \frac{e^{-i k U}}{\sqrt{4\pi|k|}}-\frac{e^{-i k U_{cl}(V)}}{\sqrt{4\pi|k|}}
+ \end{equation*}
+Above given in-mode is the solution of our system \ref{eq:waveequationtr}, which follows the boundary condition \ref{eq:bc}
+ To analyse the frequency content of its scattered part, it should be Fourier decomposed on the final Cauchy surface $U~=~+\infty$. In total analogy with what we have on \scrim, on \scrip we have 
+ \begin{equation*}
+     \varphi_\omega(V)~=~\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}}.
+ \end{equation*}
+
+ The scattered mode can be decomposed as 
+ \begin{equation*}
+     \varphi_k^{scat} = \int_0^\infty d\omega(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*),
+ \end{equation*}
+where the coefficients $\alpha_{\omega k}~,~\beta_{\omega k}$ are known as \emph{Bogoliubov coefficients}. They can be determined by the Klein-Gordon inner product by (\ref{eq: KG_inner_product}) as  
+\begin{enumerate}
+    \item $\alphaok^*~=~<\varphi_{\omega}|\varphi^{scat}_k>$
+    \item $\betaok^*=<\varphi^*_{\omega}|\varphi^{scat}_k>$
+\end{enumerate}
+The explicit expression for the $\betaok$ can be computed as,
+\begin{eqnarray}\label{eq:beta}
+\begin{aligned}
+    \betaok &=~ <\varphi_{\omega}|\varphi^{*scat}_k> \\
+    &=\int_{-\infty}^{+\infty} dV i\left(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}}\dl_V(\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}})-\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}}\dl_V(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}})\right)\\
+    % &=-\int_{-\infty}^{+\infty} dV i\left(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}}\dl_V(\frac{e^{-i k U_{cl}(V)}}{\sqrt{4\pi|k|}})-\frac{e^{-i k U_{cl}(V)}}{\sqrt{4\pi|k|}}\dl_V(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}})\right)\\
+    &=\int_{-\infty}^{+\infty} dV i\left(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}}(ik\dl_VU_{cl}(V))(\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}})-\frac{e^{i k U_{cl}(V)}}{\sqrt{4\pi|k|}}(-i\omega)(\frac{e^{-i \omega V}}{\sqrt{4\pi|\omega|}})\right)\\
+    &=\int_{-\infty}^{+\infty} dV \frac{e^{i(U_{cl}(V)k-V\omega)}}{\sqrt{4\pi|\omega|}\sqrt{4\pi |k|}}(-k\dl_V U_{cl}(V)-\omega)\\
+    \end{aligned}
+\end{eqnarray}
+
+% A similar calculation for $\alphaok$ can be found in Appendix \ref{app:b_coeff}. In order to get the expression for $\alpha_{\omega k}$, let's look at the following quantity,
+
+% \begin{eqnarray*}
+%      &=~<\varphi_{\omegap}|\varphi^{scat}_k>\\
+%      &=~ <\varphi_{\omegap}|\int_0^\infty d\omega(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*)>\\
+%     &=~\int_0^\infty d\omega<\varphi_{\omegap}|(\alpha^*_{\omega k}\varphi_\omega-\beta^*_{\omega k}\varphi_\omega^*)>\\
+%     &=~\int_0^\infty d\omega(\alpha_{\omega k}^*<\varphi_{\omegap}|\varphi_\omega>-\beta^*_{\omega k}<\varphi_{\omegap}|\varphi_\omega^*>)\\
+%     &=~\int_0^\infty d\omega(\alpha_{\omega k}^*\emph{sgn}(\omega)\delta(\omega-\omegap)+\beta^*_{\omega k}\emph{sgn}(\omega)\delta(\omega+\omegap))\\
+%     &=~\alpha^*_{\omegap k}
+% \end{eqnarray*}
+
+From the commutation relation of the two different modes, we can deduce the following relations
+\begin{equation}\label{eq:constraints}
+    \begin{aligned}
+        \int_0^{\infty}dk (\alphaok^*\alpha_{\omega'k}-\betaok\beta_{\omega'k}^*)~&=~\delta(\omega'-\omega)\\
+        \int_0^{\infty}d\omega (\alphaok\alpha_{\omega k'}^*-\betaok\beta_{\omega k'}^*)~&=~\delta(k'-k)\\
+        \int_0^{\infty}dk (\alphaok\beta_{\omega k'}-\betaok\alpha_{\omega k'}^*)~&=~0\\
+        \int_0^{\infty}d\omega (\alphaok\beta_{\omega' k}^*-\betaok^*\alpha_{\omega'k})~&=~0\\
+    \end{aligned}
+\end{equation}
+
+As we will see, the above relation will vastly help us in generalising the output of the neural network away from the training data.
+
+\color{red}
+\subsection{Constraints}
+
+Since, the neural operators approximates the function $\alphaok$, we need another neural network parallel to which also approximates $\betaok$. Since I now have them in the matrix form I can discretise the constraint equations to become matrix equations to be solved in a simple manner. Essentially the constraint equation is then
+\begin{eqnarray*}
+    \sum_{k=1}^{N}\frac{1}{N}(\alphaok^*\alphaopk-\betaok\betaopk^*)~=~\delta_{\omega,\omega'}
+\end{eqnarray*}
+In this simple way we can impose the constraints. Maybe the loss will look like
+\begin{equation}
+   \mathbb{C}_1=\norm{\sum_{k=1}^{N}\frac{1}{N}(\alphaok^*\alphaopk-\betaok\betaopk^*)~-~\delta_{\omega,\omega'} }
+\end{equation}
+The dirac delta which appears in the above equation is essentially a unit matrix if the discretisation of $\omega$ and $\omega'$ is same.
+
+The function $\betaok$, is the focus of our work. One can see that the number operator calculated for the observer at \scrip, is given by
+
+\begin{equation*}
+    N_k=\int_{-\infty}^{+\infty}|\betaok|^2d\omega
+\end{equation*}
+
+
+% \section{Solving for $\betaok$}
+
+% The function $\betaok$ is the key element while calculating the total energy of the field and the total number of particle, as experienced by one observer\cite{Good_2017,Good_2020}. We focus on engineering a neural network to approximate the function $\betaok$. Since the function $\betaok$ is parameterized by the two frequencies which are continuous, the only way to implement it on a computer is to discretise it. In doing so, $\betaok$ becomes a matrix of size $N\times N$. 
+
+% The discretization of the frequency is to be done in a careful manner. Due to our restriction on the left moving modes only, the frequency spectrum in only limited to positive frequency. The domain of discretization and the number of  discretization points in the frequency domain do not affect the way we are trying to do the computations. To keep it simple, we will have uniform distribution and equal domain for both the frequencies. The abovementioned statement can be assumed to be true because the neural networks are found to interpolate well within the collocation domain. \textcolor{red}{Add few refernces on this.}
+
+% \subsection{Neural Network Architecture}
+ 
+
+%  As we have already convinced ourselves that the function $\betaok$ will be a matrix, the neural network is to be written in such a manner that the output should be a matrix. Such neural networks have been studied before \cite{gao2016matrixneuralnetworks}. 
+
+% Consider an array that encodes the discretisation of the time domain,
+% \begin{equation}
+%     T~=~\left[t_1,t_2,...,t_N\right]^T.
+% \end{equation}.
+
+% Then, for a given trajectory of the mirror $z_{cl}(t)$, the trajectory is given by
+% \begin{equation}
+%     \inz~=~\left[z(t_1),z(t_2),...,z(t_N)\right]^T.
+% \end{equation}
+ 
+% In this way, $\inz$ becomes the input for our neural network. In section \ref{}, we will see how the training data is generated.
+
+% A layer of the neural network is given as ,
+
+% \begin{equation}
+%     y^{(\mu+1)}_{ab} =     
+%     \sigma(\sum_{c,d}W^{(\mu)}_{abcd}y^{(\mu)}_{cd}+b_{cd}^{(\mu)})
+% \end{equation}
+% , where $\sigma$ is an activation function which will be chosen to be \textcolor{red}{tanh(x)}. The index $\mu$ indicates the hidden layer. The rank of the weight matrix and basis is chosen in such a way that, even though the input layer is only a column vector the final output is a matrix.
+
+% A few remarks are in order,
+% \begin{enumerate}
+%     \item In order to get $\betaok$ as output, we discretise the frequency domain, so that $\betaok$ become a matrix. The two frequencies will play the role of two indices of the matrix. The reason to do so is two fold. Firstly, when we obtain the two coefficients in matrix form then the implementation of the constraints simplifies to matrix multiplication.
+
+%     In this way the first equation in \ref{eq:constraints} becomes 
+%     \begin{equation*}
+%          \sum_{k=1}^{N}\frac{1}{N}(\alphaok^*\alphaopk-\betaok\betaopk^*)~=~\delta_{\omega,\omega'}
+%     \end{equation*}
+%     or 
+%     \begin{equation*}
+%         \alpha^*\alpha^\intercal-\beta\beta^\dag =\mathbb{1}
+%     \end{equation*}
+%     \item The output of the model is supposed to be a complex matrix\cite{barrachina2023theoryimplementationcomplexvaluedneural,complex_IEEE,Dramsch_2021_complex}. There the theory of complex valued neural network has attracted attention recently because of a simple reason that almost every branch of engineering deals with complex numbers. Since the theory of holonomic functions is includes subtleties like branch cuts and poles, it is not straightforward to generalise a neural network to include complex numbers.  Inclusion of complex weights and biases in the model results in lots of choices that can be made for activation function. \\
+%     Here, we will choose the simplest way to implement the above. The activation function acts independently on the real and imaginary part of the output of a neuron. The real and imaginary parts go through same initialisation scheme but again independently. This is the simplest way to deal with complex functions and not run into various subtelties.
+    
+% \end{enumerate}
+
+% \section{Implementation}
+
+
+
+% \subsection{Testing our neural network}
+% We tested our modified architecture to fit the function $sin(x)$. First, we changed the layer structure to a $N \times N$ matrix, which leaves us with a $N \times N \times N \times N$ weight tensor $W$ and a $N \times N$ bias tensor $b$. The activation function used was $tanh(x)$ and the neurons, weights and biases can all take up complex values.
+
+% For testing, we chose $N=4$ and the target function to be $Y = sin(AX+B)$, where X \& Y are the input and output matrices respectively and A \& B were chosen randomly.
+
+% $$
+%  A = \begin{pmatrix}
+%   1.1998-0.1574j &  0.6373-0.5554j & -0.7039-1.0864j & 0.3819-1.3114j\\
+%   0.0756-0.5395j & -0.0053-0.6152j & -0.8208-0.0869j & -1.9599+0.8681j \\
+%   -0.4195-0.1863j & -0.2006+0.1367j & 0.1942+0.3467j & -1.0001+1.1453j\\
+%   -0.3711-1.1124j & 0.1005+0.8200j & -0.4263-0.1863j &  1.6511+0.4498j\\
+%  \end{pmatrix}
+% $$
+% $$
+% B = \begin{pmatrix}
+%     -0.6968-0.8846j & 0.7214-0.5691j & -0.9276-0.7205j &   0.1747+0.0385j\\
+%     0.4997+1.1992j & 0.6392-1.1646j & 0.0002+0.1768j &        -0.3270+0.6001j\\
+%     0.8354+0.7416j & 1.3680-0.0796j &  1.0705+0.2365j & 0.1610+0.2640j\\
+%     1.1970+0.3054j & 1.4600+1.0038j & -0.4845+0.7547j &
+%     0.1427-0.3385j\\
+% \end{pmatrix}
+% $$
+
+% We then generated $100$ random $4\times 4$ matrices as training data for $X$ and calculated $Y = sin(AX+B)$. Our neural network had 2 layers, the optimizer chosen was "Adam" and Mean Squared Error (MSE) was chosen as the loss function. The neural network was trained on for 200 epochs and in the end, the training loss obtained was 69.4404.
+
+% We then compared our neural network's prediction with the expected output for one randomly chosen $4 \times 4$ matrix and compared the results.
+
+% $$Y_{pred} - Y_{actual} = \begin{pmatrix}
+%     0.7403+1.3917j & -0.1595-0.0605j & 0.2038-0.26527j & 1.2080+0.0336j\\
+%     5.1085+3.9645j & -0.8260+0.8135j &  0.6814-0.4258j &  2.9697+1.1110j\\
+%     1.4334-1.9257j & -1.1051-0.0017j & -0.2180+0.4227j & -0.7622-0.3953j\\
+%     0.3161-1.1541j & -1.0223-0.4867j & -0.4286-5.4435j & -1.4481+0.1422j\\
+% \end{pmatrix}$$
+
+% The difference in absolute values was found to be: 
+% $$|Y_{pred} - Y_{actual}| = \begin{pmatrix}
+%     1.5764 & 0.1706 & 0.3345 & 1.2085\\
+%     6.4664 & 1.1594 & 0.8035 & 3.1707\\
+%     2.4006 & 1.1051 & 0.4756 & 0.8586\\
+%     1.1966 & 1.1322 & 5.4604 & 1.4550\\
+% \end{pmatrix}$$
+\color{black}
+\section{Literature survey}
+
+\begin{center}
+    \begin{tabular}{ | m{8em} | m{8em} | m{8em} | m{8em} | } 
+  \hline
+  Motion of the mirror & Beta function& Parameter & Remarks  \\ 
+  \hline
+   $z_{cl}(t) = -\frac{s}{\kappa}W(e^{\kappa t})$& $\frac{-i}{\pi}s^{i \omega_p}\sqrt{\omega\omega'}(i\omega_s)^{i\omega_p}\Gamma(-i\omega_p) $ & $\omega_p\equiv\omega+\omega'$, $\omega_s\equiv(s^{-1}+1)\omega(s^{-1}-1)\omega'$  & 1612.02459v1   \\ 
+  \hline
+  $g(t+z)=-sinh(2\kappa x)$ & $-\frac{s\sqrt{\omega\omega'}}{\pi \kappa \omega_p}e^{-\frac{\pi\omega}{2\kappa}}K_{\frac{i\omega}{\kappa}}(\frac{\omega_p}{g})$ & $\omega_{p,n}\equiv\omega\pm \omega'$ & 2108.11188v1\\ 
+  \hline
+\end{tabular}
+\end{center}
+
+\section{Fourier Neural Operator}
+
+\subsection{Neural Operators}
+
+Traditional neural networks learn mappings between finite-dimensional vectors:
+\[
+f: \mathbb{R}^n \rightarrow \mathbb{R}^m.
+\]
+However, many physical problems including quantum field theory in curved spacetime require learning mappings between \emph{functions}, i.e.,
+\[
+\mathcal{G}: u(x) \rightarrow v(x),
+\]
+where both $u$ and $v$ are functions defined over continuous domains.
+
+In the moving mirror problem, the mapping of interest is:
+\[
+z(t) \;\longmapsto\; \beta_{\omega \omega'},
+\]
+which is an operator between function spaces. Standard neural networks struggle with such problems due to their dependence on discretization and lack of resolution invariance.
+
+Neural operators address this limitation by directly learning mappings between function spaces.
+
+A standard deep neural network applies a sequence of affine transformations and nonlinearities:
+\[
+h^{(l+1)} = W^{(l)} h^{(l)} + b^{(l)}+\int\kappa(x,y)h(y)dy.
+\]
+
+This can be interpreted as a discretized approximation to an integral operator:
+\[
+v(x) = \int \kappa(x, y)\, u(y)\, dy + b(x),
+\]
+where $\kappa(x,y)$ is a kernel.
+
+Neural operators generalize this idea by directly learning the kernel $\kappa(x,y)$.
+
+\subsection{Fourier Neural Operator}
+
+The Fourier Neural Operator (FNO) parameterizes the kernel in Fourier space. Instead of learning $\kappa(x,y)$ directly, it learns a spectral representation:
+\[
+\hat{v}(k) = R(k)\, \hat{u}(k),
+\]
+where:
+\begin{itemize}
+    \item $\hat{u}(k)$ is the Fourier transform of $u(x)$,
+    \item $R(k)$ is a learned complex-valued weight,
+    \item $\hat{v}(k)$ is the transformed output.
+\end{itemize}
+
+Each FNO layer is defined as:
+\begin{equation}
+v(x) = \mathcal{F}^{-1}\left( R(k)\,\mathcal{F}(u)(k) \right) + W u(x),
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{F}$ denotes the Fourier transform,
+    \item $R(k)$ acts only on a finite number of low-frequency modes,
+    \item $W$ is a pointwise linear transformation.
+\end{itemize}
+
+This architecture captures both:
+\begin{itemize}
+    \item \textbf{Global interactions} via Fourier modes,
+    \item \textbf{Local interactions} via pointwise linear layers.
+\end{itemize}
+
+The Fourier Neural Operator consists of a sequence of layers that alternate between spectral convolution and pointwise transformations. A single layer can be written as:
+\begin{equation}
+u_{l+1}(x) = \sigma\Big( \mathcal{F}^{-1} \big( R_l(k)\,\mathcal{F}(u_l)(k) \big) + W_l u_l(x) \Big),
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{F}$ and $\mathcal{F}^{-1}$ denote the Fourier transform and its inverse,
+    \item $R_l(k)$ is a learned spectral weight acting on Fourier modes,
+    \item $W_l$ is a pointwise linear transformation,
+    \item $\sigma$ is a non-linear activation function.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\resizebox{0.9\linewidth}{!}{
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.4cm,
+  box/.style={draw, rounded corners, minimum width=2.0cm, minimum height=0.8cm, align=center, fill=blue!10, font=\small},
+  op/.style={draw, rounded corners, minimum width=2.2cm, minimum height=0.9cm, align=center, fill=green!10, font=\small},
+  sum/.style={draw, circle, inner sep=1pt, minimum size=5mm},
+  arr/.style={-{Stealth}, thick}
+]
+
+\node[box] (input) {$u_l(x)$};
+\node[op, right=of input] (fft) {$\mathcal{F}$};
+\node[op, right=of fft] (mult) {$\hat{u}(k)R_l(k)$};
+\node[op, right=of mult] (ifft) {$\mathcal{F}^{-1}$};
+
+\node[op, below=0.9cm of fft] (linear) {$W_l u_l(x)$};
+
+\node[sum, right=1.4cm of ifft] (sum) {$+$};
+
+\node[box, right=of sum] (nonlin) {$\sigma$};
+\node[box, right=of nonlin] (output) {$u_{l+1}(x)$};
+
+\draw[arr] (input) -- (fft);
+\draw[arr] (fft) -- (mult);
+\draw[arr] (mult) -- (ifft);
+\draw[arr] (ifft) -- (sum);
+
+\draw[arr] (input) |- (linear);
+\draw[arr] (linear) -| (sum);
+
+\draw[arr] (sum) -- (nonlin);
+\draw[arr] (nonlin) -- (output);
+
+\end{tikzpicture}
+}
+\caption{Single Fourier Neural Operator layer.}
+\end{figure}
+
+In practice, only the first $k_{\max}$ Fourier modes are retained:
+\begin{equation}
+\hat{u}(k) \rightarrow \hat{u}(k), \quad |k| \leq k_{\max}.
+\end{equation}
+
+This truncation:
+\begin{itemize}
+    \item Reduces computational cost,
+    \item Acts as a spectral regularizer,
+    \item Focuses learning on low-frequency (global) structure.
+\end{itemize}
+
+Stacking $L$ such layers yields:
+\[
+\mathcal{G}_\theta = \underbrace{\mathcal{K}_L \circ \sigma \circ \cdots \circ \mathcal{K}_1 \circ \sigma}_{\text{FNO layers}},
+\]
+where each $\mathcal{K}_l$ is a Fourier layer.
+
+This enables the model to approximate nonlinear operators:
+\[
+\mathcal{G}_\theta: u(x) \rightarrow v(x).
+\]
+
+A key theoretical justification for using Fourier Neural Operators is their property as universal approximators of operators. Specifically, \cite{kovachki2021} proved that FNOs can approximate any continuous nonlinear operator between Banach spaces to arbitrary precision.
+
+The Universal Approximation Theorem ensures that the FNO architecture is expressive enough to capture the complex mapping from mirror trajectories $z(t)$ to Bogoliubov coefficients $\beta_{\omega\omega'}$, provided the network is sufficiently large.
+
+\subsection{Application to Moving Mirror Problem}
+
+In this work, the FNO is used to learn the operator:
+\[
+z(t) \;\longmapsto\; \beta_{\omega \omega'}.
+\]
+
+The input is the discretized trajectory $z(t)$, while the output is a two-dimensional function defined on the $(\omega, \omega')$ grid.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+  node distance=1.2cm and 2.0cm,
+  box/.style={draw, rounded corners, minimum width=2.8cm, minimum height=1.0cm, align=center, fill=blue!8},
+  blackbox/.style={draw, rounded corners, minimum width=3.2cm, minimum height=1.4cm, align=center, fill=gray!15, font=\bfseries},
+  arr/.style={-{Stealth}, thick}
+]
+
+\node[box] (traj) {Trajectory\\$z(t)$};
+\node[box, below=0.6cm of traj] (beta_formula) {Training data\\$\beta_{\omega\omega'}$};
+\node[blackbox, right=2.2cm of traj, yshift=-0.5cm] (fno) {Fourier Neural\\Operator};
+\node[box, right=2.2cm of fno] (output) {Predicted\\$\beta_{\omega\omega'}$};
+
+\draw[arr] (traj.east) -- ++(0.6,0) |- (fno.west);
+\draw[arr] (beta_formula.east) -- ++(0.6,0) |- (fno.west);
+\draw[arr] (fno.east) -- (output.west);
+
+\end{tikzpicture}
+\caption{Operator learning framework using FNO}
+\end{figure}
+
+\vspace{6pt}
+
+\section{Experiments}
+
+We consider two classes of mirror trajectories:
+
+\begin{itemize}
+    \item \textbf{Davies trajectory:}
+    \[
+    z(t) = -t - A e^{-2\kappa t} + B
+    \]
+    \begin{equation}
+    \beta_{\omega'\omega}
+    =
+    -\,i (2\pi)^{-1} (\omega'\omega)^{-1/2}
+    \, e^{-\frac{\pi \omega'}{2\kappa}}
+    \, e^{-i \omega' D}
+    \, e^{i \omega B}
+    \, \omega^{-i \omega'/\kappa}
+    \, \Gamma\!\left(1 + \frac{i \omega'}{\kappa}\right),
+    \end{equation}
+    \item \textbf{Good's trajectory:}
+    \[
+    z(t) = -\ln(\cosh t)
+    \]
+    \begin{equation}
+    \beta_{\omega\omega'}
+    =
+    - \frac{\sqrt{\omega \omega'}}{\pi \kappa \,\omega'}
+    \, e^{-\frac{\pi \omega}{2\kappa}}
+    \, K_{i\frac{\omega}{\kappa}}\!\left(\frac{\omega'}{g}\right),
+    \end{equation}
+\end{itemize}
+
+Davies' trajectory is asymptotically the same as Good's trajectory for $A=1, B=\ln2, \kappa=1$. The parameters $A$, $B$, and $\kappa$ are sampled randomly to generate a dataset of trajectories.
+
+The Bogoliubov coefficients $\beta_{\omega\omega'}$ are computed analytically using:
+
+\begin{itemize}
+    \item Davies formula,
+    \item Good’s formula involving modified Bessel functions.
+\end{itemize}
+
+We discretize the frequency space using a uniform grid:
+\[
+\omega, \omega' \in [\omega_{\min}, \omega_{\max}]
+\]
+with $N=10$ points.
+
+Two ranges were considered:
+\begin{itemize}
+    \item $\omega \in [1, 10]$
+    \item $\omega \in [0.1, 2]$
+\end{itemize}
+
+\subsection{Comparison of Analytical Formulae}
+
+We first verify consistency between Davies and Good formulas as they are asymptotically equivalent.
+
+For the range $\omega \in [1,10]$:
+\begin{itemize}
+    \item Both formulas agree closely.
+    \item $\beta_{\omega\omega'}$ rapidly decays for higher modes.
+    \item Maximum deviation observed:
+    \[
+    \max |\Delta \beta| = 0.0353
+    \]
+\end{itemize}
+
+For $\omega \in [0.1,2]$:
+\begin{itemize}
+    \item $\beta$ values remain significant across modes.
+    \item Davies and Good formulas exhibit noticeable deviations.
+    \item Maximum deviation observed \[
+    \max |\Delta \beta| = 1.6671
+    \]
+\end{itemize}
+
+The diagonal elements were then extracted to perform the black body spectrum check \cite{DaviesFulling1977}:
+\[
+\sum_{\omega'}|\beta_{\omega\omega}|^2 = N_{\omega} = \frac{1}{e^{2\pi\omega/\kappa} - 1}
+\]
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.40\textwidth]{plot1.png}
+\hfill
+\includegraphics[width=0.40\textwidth]{plot2.png}
+\caption{Comparison with Planck spectrum for $\omega \in [1,10]$}
+
+\vspace{5pt}
+
+\includegraphics[width=0.40\textwidth]{plot3.png}
+\hfill
+\includegraphics[width=0.40\textwidth]{plot4.png}
+
+\caption{Comparison with Planck spectrum for $\omega \in [0.1,2]$}
+\end{figure}
+
+The agreement confirms the expected thermal behavior.
+
+\subsection{Training the FNO}
+We generated a dataset of 1000 different trajectories using different values of $A, B, \kappa$, etc. where $\approx 50\%$ of them were Davies, and the other half were Good's. The following parameters of discretization were selected:
+\begin{itemize}
+    \item Number of time samples: 128
+    \item Number of $\omega$ samples: 30
+    \item Number of $\omega'$ samples: 30
+    \item Range of $\omega$ and $\omega'$: $[0.01, 2]$ $0$ was excluded as the formula blows up for either frequency being 0
+    \item Number of trajectories: 1000
+\end{itemize}
+
+We selected the following parameters for the FNO architecture:
+\begin{itemize}
+    \item Layers: 4
+    \item Modes: (12,12)
+    \item Hidden Modes: 64
+    \item Epochs: 20
+\end{itemize}
+
+We split the dataset into the training set and the validation set (80:20 split) and the Element-wise Mean Squared Error (MSE) metric was used to evaluate the training and validation losses.
+
+After a trial run of 20 epochs, the following losses were observed:
+\begin{itemize}
+    \item Training loss: 2.1527e-03
+    \item Validation loss: 1.4930e-03
+\end{itemize}
+
+
+
+%************************************************************************************************************
+% \section*{References}
+% \tiny
+% \bibliographystyle{unsrt}
+% \bibliography{Refs}
+% %************************************************************************************************************
