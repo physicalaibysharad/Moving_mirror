@@ -8,27 +8,28 @@ coefficient `β_{ω,ω'}`, using the samples generated under `data/files/`.
 | File | Role |
 |---|---|
 | `model_config.py` | FNO architecture (`FNOConfig`) |
-| `scheduler_config.py` | Adam settings and the exponential LR decay (`OptimizerConfig`, `ExponentialDecayConfig`) |
+| `scheduler_config.py` | Adam settings and the warmup-then-decay LR schedule (`OptimizerConfig`, `WarmupDecayConfig`) |
 | `train_config.py` | The run itself: epochs, batch size, split, device (`TrainConfig`) |
 | `fno_tensors.py` | Sample dict -> FNO input/target tensors (`TensorSpec`, `pack_input`, `pack_target`) |
 | `dataset.py` | Dataset, 80:20 stratified split, dataloaders |
 | `normalization.py` | Input standardisation fitted on the training split |
 | `build.py` | Model factory; resolves the vendored `neuralop` |
-| `losses.py` | Element-wise MSE, relative L2, zero-prediction baseline |
+| `losses.py` | Element-wise MSE (training objective) and relative L2 (reported metric) |
 | `train.py` | Entry point |
 
 ## Running
 
 ```bash
 cd model
-python train.py                          # manuscript defaults, 20 epochs
+python train.py                          # defaults, 500 epochs
 python train.py --epochs 5 --limit 40    # quick smoke run
 python train.py --help                   # every flag
 ```
 
 `neuralop` need not be installed: `build.py` falls back to the vendored copy at
-`neuraloperator/`. Runs are written to `model/runs/<run_name>/` as `best.pt`
-and `history.json`, each carrying the full resolved configuration.
+`neuraloperator/`. Runs are written to `outputs/runs/<run_name>/` (at the repo
+root, not under `model/`) as `best.pt` and `history.json`, each carrying the
+full resolved configuration. See [outputs/README.md](../outputs/README.md).
 
 ## How the input is built
 
@@ -52,30 +53,41 @@ nothing; the family channel tells the model which window a sample came from.
 The `z` channels are standardised using statistics fitted on the training split
 alone, since the two families differ in scale (`z ∈ [-10, 0]` against
 `z ∈ [-15, 15]`). The target is left in physical units by default, so the
-reported MSE is directly comparable with the manuscript.
+training-objective MSE stays comparable with the manuscript's.
 
 ## Defaults
 
-From the Experiments section of the manuscript: 4 layers, modes `(12, 12)`,
-64 hidden channels, 20 epochs, 80:20 split, element-wise MSE. Adam at
-`lr = 1e-3` with `weight_decay = 1e-4`, decayed by `gamma = 0.9` per epoch, so
-the rate reaches `1.2e-4` by epoch 20. The split is stratified by family, so
-both families appear in the same proportion in training and validation.
+Architecture from the Experiments section of the manuscript: 4 layers, modes
+`(12, 12)`, 64 hidden channels, 80:20 split. Adam with `weight_decay = 1e-4`.
+
+The learning rate follows a two-phase geometric warmup-then-decay: `1e-4` at
+epoch 0, up to `1e-2` by `15%` of the way through the run (`warmup_fraction`),
+back down to `1e-6` at the last epoch — `500` by default. Each phase is
+geometric (`lr = a * r**epoch`), so the lr-vs-epoch curve has positive
+curvature on both legs — accelerating into the peak, decelerating out of it —
+rather than moving in straight lines. Override with `--lr-start`, `--lr-peak`,
+`--lr-end` and `--warmup-fraction`.
+
+The split is stratified by family, so both families appear in the same
+proportion in training and validation.
+
+All calculations run in `float64`/`complex128`, matching the precision the
+samples are generated in (`TensorSpec.dtype`). `train.py` sets
+`torch.set_default_dtype` before the model is built, which is also what every
+`nn.Linear`/`nn.Conv` layer the FNO creates picks up automatically; the
+vendored `neuralop`'s spectral-convolution weights and FFT buffers, which
+otherwise hardcode `complex64`, are patched in
+`neuraloperator/neuralop/layers/spectral_convolution.py` to follow the same
+global default instead. Double precision costs several times the runtime and
+twice the memory of `float32` on GPU — worth knowing if training gets slow.
 
 ## Reading the loss
 
-Element-wise MSE on raw `β` is dominated by the largest entries: `|β|` spans
-about twelve orders of magnitude across the grid, so **a model predicting zero
-everywhere already scores a small MSE**. Every run therefore reports two extra
-numbers:
-
-- the zero-prediction baseline MSE, which the model must beat by a wide margin,
-- the relative L2 error, which is scale-free and cannot be gamed this way.
-
-A run at the defaults reaches val MSE `1.23e-03` (the manuscript quotes
-`1.4930e-03`), against a zero baseline of `2.14e-02` — 17.4x better than
-predicting zero — at a relative L2 of `0.227`. The MSE agrees with the
-manuscript, while the relative L2 shows there is real headroom left: the model
-captures the large entries well and the exponentially small ones much less so.
-Predicting `log|β|` instead of `(Re β, Im β)` is the natural next thing to try
-if that tail matters.
+The training objective (backpropagated each step) is element-wise MSE on raw
+`β`. It is not what gets reported, because `|β|` spans about twelve orders of
+magnitude across the grid, so **a model predicting zero everywhere already
+scores a small MSE** — it would look deceptively good. Every run instead
+reports **relative L2** (`||pred - target|| / ||target||`, scale-free and not
+gameable this way) for both train and validation, at every epoch and in the
+run summary. The best checkpoint (`best.pt`) is the one with the lowest
+validation relative L2, not the lowest MSE.

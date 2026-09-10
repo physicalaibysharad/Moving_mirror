@@ -19,8 +19,9 @@ The generation scripts are versioned; the samples are regenerated locally.
 ## Status
 
 Data generation is complete for the two exactly-solvable families of section 4
-of the manuscript, and validated against the source papers. Nothing downstream
-of the raw samples has been built yet.
+of the manuscript, and validated against the source papers. An FNO training
+pipeline is built and running on top of the raw samples; see
+[model/README.md](model/README.md).
 
 | Family | Paper | Trajectory | Samples |
 |---|---|---|---|
@@ -36,8 +37,8 @@ papers' own published expressions to a relative error of order 10⁻¹⁴, and t
 particle spectrum of the second family reproduces eq. (5) of arXiv:2108.11188
 to order 10⁻¹⁵.
 
-Still to be done: packing the samples into model inputs, and the neural-operator
-training itself.
+Both are now done — see [model/README.md](model/README.md) for the input
+packing and the training pipeline.
 
 ## Quickstart
 

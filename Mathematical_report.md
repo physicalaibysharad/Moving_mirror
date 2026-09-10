@@ -446,16 +446,18 @@ channels. Harmless, but one of the two could be dropped.
 
 ## Step 14. The target
 
-**What happens.** `β` is split into two real channels, `(Re β, Im β)`, and cast
-to `float32`.
+**What happens.** `β` is split into two real channels, `(Re β, Im β)`, and kept
+at `float64` (the pipeline now runs end to end in double precision, matching
+the `complex128` the samples are generated in — see
+[model/README.md](model/README.md)).
 
-**Why float32 is safe here.** The real and imaginary parts are bounded by
-`|β| ≲ 8`, and `float32` denormals reach about `10^{-45}`, far below the
-smallest entries (`~10^{-12}`). Precision, not range, is what is lost, and
-about 7 significant digits is ample for a model whose error is many orders of
-magnitude larger. This would **not** be safe for a log-magnitude target, where
-the small values become large negative numbers that must be resolved
-accurately.
+**float32 would also have been safe here**, for what it is worth: the real and
+imaginary parts are bounded by `|β| ≲ 8`, and `float32` denormals reach about
+`10^{-45}`, far below the smallest entries (`~10^{-12}`). Precision, not range,
+would have been what is lost, and about 7 significant digits would have been
+ample for a model whose error is many orders of magnitude larger — though this
+would **not** have been safe for a log-magnitude target, where the small
+values become large negative numbers that must be resolved accurately.
 
 **Why splitting into real and imaginary parts is reasonable — checked, not
 assumed.** A concern with this representation is that if the phase of `β` wound
@@ -492,40 +494,43 @@ represented and make the validation score depend on the draw rather than on the
 model.
 
 **Training.** A Fourier Neural Operator — 4 layers, 12 × 12 modes, 64 hidden
-channels — is trained for 20 epochs with Adam and an exponentially decaying
-learning rate, minimising element-wise mean squared error. The details are in
-[model/README.md](model/README.md).
+channels — is trained for 500 epochs with Adam, minimising element-wise mean
+squared error. The learning rate follows a two-phase geometric warmup-then-
+decay (`1e-4 → 1e-2` over the first 15% of the run, then `1e-2 → 1e-6` by the
+last epoch), rather than a flat exponential decay from the start. The details
+are in [model/README.md](model/README.md).
 
-**Reading the loss, which needs care.** The reported metric is element-wise MSE
-on raw `β`. Combined with Step 7, this means:
+**Reading the loss, which needs care.** The quantity minimised is still
+element-wise MSE on raw `β`. Combined with Step 7, this means:
 
 > Roughly 96% of the target's squared magnitude lies in the lowest-frequency
 > row of the grid. The MSE is therefore, to a good approximation, a measure of
 > how well the model fits that one row.
 
 And because most of the grid is nearly zero, **a model that predicted zero
-everywhere would already score a small MSE.** So the raw number cannot be read
-on its own. Two further numbers are reported for that reason:
+everywhere would already score a small MSE.** So the raw MSE cannot be read on
+its own — which is why it is no longer what gets *reported*. `train.py` now
+reports only the **relative L² error**
+(`‖pred − target‖ / ‖target‖`), for both train and validation, at every epoch;
+it divides by the size of each target and so cannot be made small by
+predicting zero, and it is what the best checkpoint is now selected on. This
+implements the "better mathematics" this section used to recommend.
 
-- the **zero-prediction baseline**, the MSE of predicting zero everywhere. The
-  trained model must beat it by a wide margin. It scores 1.23e-03 against a
-  baseline of 2.14e-02, so it is 17.4× better than predicting nothing — the
-  model is genuinely learning.
-- the **relative L² error**, which divides by the size of each target and so
-  cannot be made small by predicting zero. It sits at 0.227, i.e. about 23%.
+An earlier run — 20 epochs, `float32`, flat exponential decay — scored an MSE
+of 1.23e-03 against a zero-prediction baseline of 2.14e-02 (17.4× better than
+predicting nothing) and a relative L² of 0.227 (≈23%), with the MSE agreeing
+closely with the manuscript's reported 1.4930e-03. Those numbers are from that
+earlier configuration, not the current 500-epoch `float64` pipeline described
+above, and have not yet been reproduced under it.
 
-Taken together these say something the MSE alone hides: the model has learned
-the large, low-frequency entries well, and the exponentially small ones much
-less well. The MSE agrees with the manuscript's reported value (1.23e-03 here,
-1.4930e-03 there), but agreement on a metric that is dominated by one row of
-the grid is weaker evidence than it appears.
-
-**Better mathematics.** If the small entries matter physically, the loss should
-be scale-free rather than absolute — a relative error, or an MSE on `log|β|`,
-would weight all twelve orders of magnitude comparably instead of letting the
-largest entries set the objective. This is the same underlying issue as the
-uniform grid in Step 7: both treat a function that varies exponentially as
-though it varied linearly.
+**Still open.** Relative L² is now what training selects on and what gets
+reported, but the training *objective* is still absolute MSE — so the model is
+still optimised toward the large, low-frequency entries and the exponentially
+small ones are still only a secondary beneficiary. Making the loss itself
+scale-free (an MSE on `log|β|`, say) rather than just the reported metric would
+close that gap; this is the same underlying issue as the uniform grid in
+Step 7 — both treat a function that varies exponentially as though it varied
+linearly.
 
 ---
 
@@ -536,7 +541,7 @@ though it varied linearly.
 | 7 | Uniform `ω` grid, but 96% of `\|β\|²` sits in one row | Sample uniformly in `ln ω`; still uniform for the FNO |
 | 13 | 128 constant channels is a redundant encoding of the trajectory | Branch/trunk split, or compress `z(t)` to a few coefficients |
 | 14 | `Im β` is identically zero for half the dataset | Predict `\|β\|`, or use per-family output heads |
-| 15 | Absolute MSE is dominated by the largest entries | Relative loss, or MSE on `log\|β\|` |
+| 15 | Absolute MSE is dominated by the largest entries | Now reported as relative L²; training objective is still absolute MSE — MSE on `log\|β\|` would close that gap |
 
 The first and last are the same mathematical point seen twice: `β` varies
 exponentially, and both the grid and the loss treat it as though it varied

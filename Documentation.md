@@ -177,9 +177,10 @@ the data is treated as final.
 
 ## Work still to be done
 
-The samples have not yet been converted into model inputs, which includes
-batching, channel layout, normalisation and any reduction to `complex64`. The
-neural-operator training has not been started.
+The samples have since been converted into model inputs and an FNO training
+pipeline is running; see [model/README.md](model/README.md) for the channel
+layout, normalisation, and the current learning-rate schedule and precision
+(`float64` throughout, not `complex64`).
 
 ## Regenerating the data
 

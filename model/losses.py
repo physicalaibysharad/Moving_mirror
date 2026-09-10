@@ -43,17 +43,15 @@ def zero_baseline_mse(target: torch.Tensor) -> torch.Tensor:
 
 @torch.no_grad()
 def evaluate(model: torch.nn.Module, loader, device: torch.device) -> dict[str, float]:
-    """Mean MSE, relative L2 and zero-baseline MSE over a loader."""
+    """Mean relative L2 over a loader."""
     model.eval()
-    totals = {"mse": 0.0, "rel_l2": 0.0, "zero_mse": 0.0}
+    total_rel = 0.0
     n_batches = 0
     for x, y in loader:
         x, y = x.to(device), y.to(device)
         pred = model(x)
-        totals["mse"] += float(elementwise_mse(pred, y))
-        totals["rel_l2"] += float(relative_l2(pred, y))
-        totals["zero_mse"] += float(zero_baseline_mse(y))
+        total_rel += float(relative_l2(pred, y))
         n_batches += 1
     if n_batches == 0:
         raise ValueError("empty loader")
-    return {k: v / n_batches for k, v in totals.items()}
+    return {"rel_l2": total_rel / n_batches}

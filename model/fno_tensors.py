@@ -23,10 +23,9 @@ grid is shared by every sample within a family, this is a relabelling of the
 axis and discards nothing; the one-hot family channel tells the model which
 window a sample came from.
 
-Beta is stored on disk as complex128 and is narrowed to float32 here.  That is
-safe for the real and imaginary parts directly (|beta| <= ~8, and float32
-denormals reach ~1e-45, far below the smallest entries) but would not be safe
-for a log-magnitude target.
+Beta is stored on disk as complex128 and is kept at that precision here:
+``TensorSpec.dtype`` defaults to ``torch.float64``, matching the double
+precision the samples were generated in.
 """
 
 from __future__ import annotations
@@ -49,7 +48,7 @@ class TensorSpec:
     family_channels: bool = True
     coord_channels: bool = True
     normalize_time: bool = True
-    dtype: torch.dtype = torch.float32
+    dtype: torch.dtype = torch.float64
 
     def __post_init__(self) -> None:
         self.families = tuple(self.families)
@@ -178,7 +177,8 @@ def unpack_prediction(pred: torch.Tensor) -> torch.Tensor:
     """Turn a ``(..., 2, n_w, n_wp)`` prediction back into complex beta."""
     if pred.shape[-3] != 2:
         raise ValueError(f"expected 2 channels (Re, Im), got shape {tuple(pred.shape)}")
-    return torch.complex(pred[..., 0, :, :].float(), pred[..., 1, :, :].float())
+    re, im = pred[..., 0, :, :], pred[..., 1, :, :]
+    return torch.complex(re, im)
 
 
 def _unit_scale(x: np.ndarray) -> np.ndarray:

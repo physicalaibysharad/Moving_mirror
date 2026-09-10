@@ -1,6 +1,6 @@
 """Train an FNO to map a mirror trajectory z(t) to its Bogoliubov coefficient.
 
-    python train.py                       # manuscript defaults: 20 epochs
+    python train.py                       # defaults: 500 epochs
     python train.py --epochs 5 --limit 40 # quick smoke run
     python train.py --help                # every knob
 
@@ -22,7 +22,7 @@ import torch
 
 from build import build_model, count_parameters, resolve_device
 from dataset import DEFAULT_FILES_ROOT, MirrorDataset, make_loaders, make_splits
-from losses import elementwise_mse, evaluate, relative_l2, zero_baseline_mse
+from losses import elementwise_mse, evaluate, relative_l2
 from normalization import Standardizer
 from train_config import TrainConfig
 
@@ -31,6 +31,11 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
     torch.manual_seed(config.seed)
     np.random.seed(config.seed)
     device = resolve_device(config.device)
+    # Every layer the FNO builds (spectral weights included, see the vendored
+    # patch in neuraloperator/neuralop/layers/spectral_convolution.py) is
+    # constructed at this dtype, so the whole forward/backward pass runs in
+    # float64 to match the data, which is float64 end to end (TensorSpec.dtype).
+    torch.set_default_dtype(config.spec.dtype)
 
     # -- data ---------------------------------------------------------- #
     dataset = MirrorDataset(files_root=files_root, spec=config.spec, limit_per_family=limit)
@@ -58,16 +63,14 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
     # -- model --------------------------------------------------------- #
     model = build_model(config.model, config.spec, dataset.n_omega, dataset.n_omega_prime).to(device)
     optimizer = config.optimizer.build(model.parameters())
-    scheduler = config.decay.build(optimizer)
+    scheduler = config.decay.build(optimizer, config.epochs)
+    peak_epoch = config.decay._peak_epoch(config.epochs)
 
     print(f"model: FNO n_modes={config.model.n_modes} hidden={config.model.hidden_channels} "
           f"layers={config.model.n_layers} -> {count_parameters(model):,} parameters")
-    print(f"device: {device} | lr {config.optimizer.lr:g} decaying by "
-          f"gamma={config.decay.gamma} per epoch "
-          f"(final {config.decay.lr_at(config.epochs - 1, config.optimizer.lr):.3g})\n")
-
-    # A model predicting zero everywhere scores this MSE; the run must beat it.
-    baseline = float(zero_baseline_mse(dataset.targets[val_idx]))
+    print(f"device: {device} | lr warms up {config.decay.lr_start:g} -> {config.decay.lr_peak:g} "
+          f"by epoch {peak_epoch + 1}, then decays to {config.decay.lr_end:g} "
+          f"by epoch {config.epochs}\n")
 
     history: list[dict] = []
     best_val = float("inf")
@@ -78,7 +81,7 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
     for epoch in range(config.epochs):
         model.train()
         epoch_start = time.time()
-        running_mse = running_rel = 0.0
+        running_rel = 0.0
         n_batches = 0
 
         for x, y in train_loader:
@@ -94,7 +97,6 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
                 torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_clip)
             optimizer.step()
 
-            running_mse += float(loss.detach())
             running_rel += float(relative_l2(pred.detach(), y))
             n_batches += 1
 
@@ -105,9 +107,7 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
         val = evaluate(model, val_loader, device)
         record = {
             "epoch": epoch + 1,
-            "train_mse": running_mse / n_batches,
             "train_rel_l2": running_rel / n_batches,
-            "val_mse": val["mse"],
             "val_rel_l2": val["rel_l2"],
             "lr": optimizer.param_groups[0]["lr"],
             "seconds": time.time() - epoch_start,
@@ -116,12 +116,11 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
 
         if (epoch + 1) % config.log_every == 0:
             print(f"epoch {record['epoch']:3d}/{config.epochs} | "
-                  f"train MSE {record['train_mse']:.4e} | val MSE {record['val_mse']:.4e} | "
-                  f"val rel-L2 {record['val_rel_l2']:.4f} | "
+                  f"train rel-L2 {record['train_rel_l2']:.4f} | val rel-L2 {record['val_rel_l2']:.4f} | "
                   f"lr {record['lr']:.2e} | {record['seconds']:.1f}s")
 
-        if record["val_mse"] < best_val:
-            best_val, best_epoch = record["val_mse"], epoch + 1
+        if record["val_rel_l2"] < best_val:
+            best_val, best_epoch = record["val_rel_l2"], epoch + 1
             if config.save_checkpoint:
                 torch.save(
                     {
@@ -135,12 +134,10 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
                 )
 
     summary = {
-        "best_val_mse": best_val,
+        "best_val_rel_l2": best_val,
         "best_epoch": best_epoch,
-        "final_train_mse": history[-1]["train_mse"],
-        "final_val_mse": history[-1]["val_mse"],
+        "final_train_rel_l2": history[-1]["train_rel_l2"],
         "final_val_rel_l2": history[-1]["val_rel_l2"],
-        "zero_baseline_val_mse": baseline,
         "n_train": len(train_idx),
         "n_val": len(val_idx),
         "n_parameters": count_parameters(model),
@@ -150,11 +147,9 @@ def train(config: TrainConfig, files_root: Path, limit: int | None = None) -> di
         json.dumps({"config": config.to_dict(), "history": history, "summary": summary}, indent=2) + "\n"
     )
 
-    print(f"\nbest val MSE {best_val:.4e} at epoch {best_epoch}")
-    ratio = baseline / best_val if best_val > 0 else float("inf")
-    print(f"zero-prediction baseline val MSE {baseline:.4e} "
-          f"-- the model is {ratio:.1f}x better than predicting zero")
-    print(f"final val relative L2 {summary['final_val_rel_l2']:.4f}")
+    print(f"\nbest val relative L2 {best_val:.8f} at epoch {best_epoch}")
+    print(f"final train relative L2 {summary['final_train_rel_l2']:.8f}")
+    print(f"final val relative L2 {summary['final_val_rel_l2']:.8f}")
     print(f"written to {out_dir}")
     return summary
 
@@ -164,11 +159,15 @@ def build_argparser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--epochs", type=int, default=defaults.epochs)
     p.add_argument("--batch-size", type=int, default=defaults.batch_size)
-    p.add_argument("--lr", type=float, default=defaults.optimizer.lr)
     p.add_argument("--weight-decay", type=float, default=defaults.optimizer.weight_decay)
-    p.add_argument("--gamma", type=float, default=defaults.decay.gamma,
-                   help="exponential LR decay factor per epoch")
-    p.add_argument("--min-lr", type=float, default=defaults.decay.min_lr)
+    p.add_argument("--lr-start", type=float, default=defaults.decay.lr_start,
+                   help="learning rate at epoch 0")
+    p.add_argument("--lr-peak", type=float, default=defaults.decay.lr_peak,
+                   help="learning rate at the end of warmup")
+    p.add_argument("--lr-end", type=float, default=defaults.decay.lr_end,
+                   help="learning rate at the last epoch")
+    p.add_argument("--warmup-fraction", type=float, default=defaults.decay.warmup_fraction,
+                   help="fraction of the run spent warming up to lr-peak")
     p.add_argument("--modes", type=int, nargs=2, default=list(defaults.model.n_modes),
                    metavar=("M_OMEGA", "M_OMEGA_PRIME"))
     p.add_argument("--hidden-channels", type=int, default=defaults.model.hidden_channels)
@@ -201,11 +200,13 @@ def config_from_args(args: argparse.Namespace) -> TrainConfig:
     config.run_name = args.run_name
     config.out_dir = args.out_dir
 
-    config.optimizer.lr = args.lr
     config.optimizer.weight_decay = args.weight_decay
-    config.decay.gamma = args.gamma
-    config.decay.min_lr = args.min_lr
+    config.decay.lr_start = args.lr_start
+    config.decay.lr_peak = args.lr_peak
+    config.decay.lr_end = args.lr_end
+    config.decay.warmup_fraction = args.warmup_fraction
     config.decay.__post_init__()
+    config.optimizer.lr = config.decay.lr_start  # the optimizer must start where the schedule does
 
     config.model.n_modes = tuple(args.modes)
     config.model.hidden_channels = args.hidden_channels

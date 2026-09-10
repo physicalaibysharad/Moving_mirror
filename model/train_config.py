@@ -13,14 +13,14 @@ from typing import Any
 from dataset import SplitConfig
 from fno_tensors import TensorSpec
 from model_config import FNOConfig
-from scheduler_config import ExponentialDecayConfig, OptimizerConfig
+from scheduler_config import OptimizerConfig, WarmupDecayConfig
 
 
 @dataclass
 class TrainConfig:
     """Everything one training run needs."""
 
-    epochs: int = 20
+    epochs: int = 500
     batch_size: int = 16
     device: str = "auto"
     seed: int = 0
@@ -30,7 +30,7 @@ class TrainConfig:
     normalize_targets: bool = False   # off: MSE stays in physical beta units
     grad_clip: float | None = 1.0
 
-    out_dir: Path = Path(__file__).resolve().parent / "runs"
+    out_dir: Path = Path(__file__).resolve().parent.parent / "outputs" / "runs"
     run_name: str = "fno_beta"
     save_checkpoint: bool = True
     log_every: int = 1
@@ -39,7 +39,7 @@ class TrainConfig:
     spec: TensorSpec = field(default_factory=TensorSpec)
     model: FNOConfig = field(default_factory=FNOConfig)
     optimizer: OptimizerConfig = field(default_factory=OptimizerConfig)
-    decay: ExponentialDecayConfig = field(default_factory=ExponentialDecayConfig)
+    decay: WarmupDecayConfig = field(default_factory=WarmupDecayConfig)
 
     def __post_init__(self) -> None:
         if self.epochs < 1:
