@@ -2,7 +2,9 @@
 
 This document records the data generation work in detail: what was produced,
 which equations were implemented, how each one was validated and with what
-result. [README.md](README.md) gives the short overview.
+result. [README.md](README.md) gives the short overview, and
+[Mathematical_report.md](Mathematical_report.md) walks through the mathematics
+of the whole chain step by step, justifying each one.
 
 The project studies the radiation produced by a moving mirror. The aim is to
 learn, with a neural operator, the map from a mirror worldline `z(t)` to its

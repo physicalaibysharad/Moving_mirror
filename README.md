@@ -53,5 +53,13 @@ python verify.py --data                 # checks the formulas and the stored fil
 [Documentation.md](Documentation.md) gives the full account: the equations
 implemented and their numbers in the source papers, every validation check with
 its measured result, and two errors found in the section 4 table of the
-manuscript. [data/README.md](data/README.md) documents the file format,
-the constants, and the open review points on the generated data.
+manuscript.
+
+[Mathematical_report.md](Mathematical_report.md) walks through the mathematics
+end to end — worldline, coefficient, grids, numerical methods, tensor packing,
+loss — justifying each step and flagging the four where better mathematics is
+available.
+
+[model/README.md](model/README.md) covers the training pipeline, and
+[data/README.md](data/README.md) documents the file format, the constants, and
+the open review points on the generated data.
