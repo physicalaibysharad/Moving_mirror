@@ -222,3 +222,5 @@ __marimo__/
 neuraloperator/
 data/files
 Research_papers/
+# Training runs
+model/runs/
